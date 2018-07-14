@@ -1,0 +1,35 @@
+{
+  "algorithmAttributes": {
+    "name": "simplehash",
+    "displayName": "Simplehash",
+    "datasetCapabilities": {
+      "allowedFileTypes": [ "krn" ],
+      "monophonic": true,
+      "polyphonic": false
+    },
+    "inputCapabilities": {
+      "monophonic": true,
+      "polyphonic": false,
+      "querySizeRange": {
+        "min": 3,
+        "max": 15
+      }
+    },
+    "parameters": [],
+    "queryRoute": "simplehash",
+    "type": "string"
+  },
+  "containerAttributes": {
+    "name": "clef-simplehash",
+    "networkAlias": "clef-simplehash",
+    "ports": [
+      {
+        "name": "query",
+        "port": 4040
+      }
+    ]
+  },
+  "image": {
+    "name": "clef_simplehash"
+  }
+}
