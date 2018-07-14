@@ -1,0 +1,8 @@
+data/
+simplehash/.classpath
+simplehash/.gitignore
+simplehash/.project
+simplehash/.settings/
+simplehash/target/
+*.krn
+*.xml
