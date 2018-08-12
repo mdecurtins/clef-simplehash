@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run -d -p 4040:8080 --rm --name clef-simplehash --network "clef_default" --network-alias "clef-simplehash" clef_simplehash
