@@ -37,7 +37,7 @@ public class Application {
      * @param params the parameters present in the request URL.
      * @return an object serializing to the JSON format specified for the Clef system.
      */
-    @RequestMapping( value = "/simplehash", method = RequestMethod.GET, consumes = MediaType.APPLICATION_XML_VALUE )
+    @RequestMapping( value = "/simplehash", method = RequestMethod.POST, consumes = MediaType.APPLICATION_XML_VALUE )
     public Response simplehash( @RequestParam Map<String, String> params, @RequestBody String musicxml ) {
     	
     	// Create a new response.
