@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class Result {
 
 	private int id;
+	private String datasetName;
 	private String filename;
 	private Map<String, Object> properties;
 	
@@ -14,10 +15,15 @@ public class Result {
 		this.filename = "";
 	}
 	
-	public Result( int id, String filename ) {
+	public Result( int id, String datasetName, String filename ) {
 		this.id = id;
+		this.datasetName = datasetName;
 		this.filename = filename;
 		this.properties = new HashMap<String, Object>();
+	}
+	
+	public String getDatasetName() {
+		return datasetName;
 	}
 	
 	public String getFilename() {
@@ -30,6 +36,10 @@ public class Result {
 	
 	public Map<String, Object> getProperties() {
 		return properties;
+	}
+	
+	public void setDatasetName( String dset ) {
+		this.datasetName = dset;
 	}
 	
 	public void setFilename( String f ) {

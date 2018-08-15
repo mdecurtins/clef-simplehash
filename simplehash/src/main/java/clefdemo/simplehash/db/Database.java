@@ -74,7 +74,7 @@ public class Database {
 			// BEGIN TRANSACTION.
 			conn = this.beginTransaction( conn );
 			
-			String sql = "INSERT INTO simplehash ( filename, partname, gram_size, gram_raw, gram_hashed ) VALUES ( ?, ?, ?, ?, ? );";
+			String sql = "INSERT INTO simplehash ( dataset_name, filename, partname, gram_size, gram_raw, gram_hashed ) VALUES ( ?, ?, ?, ?, ?, ? );";
 			PreparedStatement ps = null;
 			
 			try {
@@ -89,11 +89,12 @@ public class Database {
 				for ( HashRecord record : records ) {
 					try {
 						// Just enumerate the parameters.
-						ps.setString( 1, record.getFilename() );
-						ps.setString( 2, record.getPartname() );
-						ps.setInt( 3, record.getGramSize() );
-						ps.setString( 4, record.getGramRaw() );
-						ps.setInt( 5, record.getGramHashed() );
+						ps.setString( 1, record.getDatasetName() );
+						ps.setString( 2, record.getFilename() );
+						ps.setString( 3, record.getPartname() );
+						ps.setInt( 4, record.getGramSize() );
+						ps.setString( 5, record.getGramRaw() );
+						ps.setInt( 6, record.getGramHashed() );
 						
 						// Increment the count of inserted rows.
 						inserted += ps.executeUpdate();
@@ -167,7 +168,7 @@ public class Database {
 	 * @param conn the current database connection
 	 */
 	private void createTable( Connection conn ) {
-		String sql = "CREATE TABLE IF NOT EXISTS simplehash ( gram_id INTEGER PRIMARY KEY, filename TEXT, partname TEXT, gram_size INTEGER, gram_raw TEXT, gram_hashed INTEGER );";
+		String sql = "CREATE TABLE IF NOT EXISTS simplehash ( gram_id INTEGER PRIMARY KEY, dataset_name TEXT, filename TEXT, partname TEXT, gram_size INTEGER, gram_raw TEXT, gram_hashed INTEGER );";
 	
 		try {
 			Statement stmt = conn.createStatement();
@@ -235,7 +236,7 @@ public class Database {
 	 */
 	public List<Result> selectAllWithHash( int hash ) {
 		Connection conn = this.connect();
-		String sql = "SELECT filename, COUNT(gram_id) AS numMatches FROM simplehash WHERE gram_hashed = ? GROUP BY filename ORDER BY numMatches DESC;";
+		String sql = "SELECT dataset_name, filename, COUNT(gram_id) AS numMatches FROM simplehash WHERE gram_hashed = ? GROUP BY dataset_name, filename ORDER BY numMatches DESC;";
 		
 		List<Result> results = new LinkedList<Result>();
 		
@@ -252,7 +253,7 @@ public class Database {
 				// Add a new Result for every row returned from the database.
 				int resultid = 1;
 				while ( rs.next() ) {
-					Result r = new Result( resultid, rs.getString( "filename" ) );
+					Result r = new Result( resultid, rs.getString( "dataset_name"), rs.getString( "filename" ) );
 					r.setProperty( "matches", rs.getInt( "numMatches" ) );
 					results.add( r );
 					resultid++;

@@ -8,6 +8,7 @@ package clefdemo.simplehash.db;
  */
 public class HashRecord {
 
+	private String datasetName;
 	private String filename;
 	private String partname;
 	private int gramSize;
@@ -24,12 +25,23 @@ public class HashRecord {
 	 * @param gramRaw the raw string value of the n-gram
      * @param gramHashed the hashed value of the n-gram
 	 */
-	public HashRecord( String filename, String partname, int gramSize, String gramRaw, int gramHashed ) {
+	public HashRecord( String datasetName, String filename, String partname, int gramSize, String gramRaw, int gramHashed ) {
+		this.datasetName = datasetName;
 		this.filename = filename;
 		this.partname = partname;
 		this.gramSize = gramSize;
 		this.gramRaw = gramRaw;
 		this.gramHashed = gramHashed;
+	}
+	
+	
+	/**
+	 * 
+	 * @return
+	 * @since 1.0.0
+	 */
+	public String getDatasetName() {
+		return datasetName;
 	}
 	
 	
@@ -79,6 +91,16 @@ public class HashRecord {
 	 */
 	public int getGramHashed() {
 		return gramHashed;
+	}
+	
+	
+	/**
+	 * 
+	 * @param dset
+	 * @since 1.0.0
+	 */
+	public void setDatasetName( String dset ) {
+		this.datasetName = dset;
 	}
 	
 	

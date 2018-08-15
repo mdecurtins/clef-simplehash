@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
@@ -16,6 +17,8 @@ import java.util.Map;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import clefdemo.simplehash.db.Database;
 import clefdemo.simplehash.db.HashRecord;
@@ -36,6 +39,41 @@ public class SimplehashInitializer implements CommandLineRunner {
 	// Keep a copy of the data as a .csv file just in case it's needed for any use.
 	private Path csvdata = Paths.get( "/usr/local/data/ngrams.csv" );
 	private List<HashRecord> ngramHashRecords = new LinkedList<HashRecord>();
+	
+	
+	/**
+	 * Gets the name of the dataset to which a given file belongs.
+	 * 
+	 * This method uses the clefdataset.json file present in a directory of symbolic music data. This directory 
+	 * is expected to be the same as that of the {@code file} passed; that is to say, this file and the 
+	 * clefdataset.json file should be siblings in the file tree.
+	 * 
+	 * @param file a file of symbolic music data
+	 * @return
+	 * @since 1.0.0
+	 */
+	private String getDatasetName( Path file ) {
+		String dsetName = "";
+		Path parent = file.getParent();
+		Path clefdataset = Paths.get( parent.toString(), "clefdataset.json" );
+		if ( Files.exists( clefdataset, LinkOption.NOFOLLOW_LINKS ) ) {
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				Map<?, ?> m = mapper.readValue( Files.newInputStream( clefdataset, StandardOpenOption.READ ), Map.class );
+				if ( m.containsKey( "datasetAttributes" ) ) {
+					Object datasetAttributes = m.get( "datasetAttributes" );
+					Map<?, ?> dAtts = (Map<?, ?>) datasetAttributes;
+					if ( dAtts.containsKey( "name" ) ) {
+						dsetName = (String) dAtts.get( "name" );
+					}
+				}
+			} catch ( IOException ioe ) {
+				ioe.printStackTrace();
+			}
+		}
+		
+		return dsetName;
+	}
 	
 	
 	/**
@@ -93,7 +131,9 @@ public class SimplehashInitializer implements CommandLineRunner {
     	if ( this.ngramHashRecords == null ) {
     		this.ngramHashRecords = new LinkedList<HashRecord>();
     	}
-    	HashRecord record = new HashRecord( file.getFileName().toString(), partname, gramSize, gramRaw, hash );
+    	// Use file path to get related clefdataset.json and extract dataset name
+    	String datasetName = this.getDatasetName( file );
+    	HashRecord record = new HashRecord( datasetName, file.getFileName().toString(), partname, gramSize, gramRaw, hash );
     	this.ngramHashRecords.add( record );
     }
     
