@@ -128,7 +128,7 @@ public class Filters {
 	 * @return
 	 */
 	public static boolean isTandemInterpretation( String token ) {
-		return matchesPattern( "\\*{1}(?!I)(?!\\*)(?!kern|silbe)(clef[a-zA-Z]+[0-9]|k\\[[a-zA-Z#\\-]*\\]|M\\d{1,}\\/\\d{1,}|[a-gA-G]:)?\\s*", token );
+		return matchesPattern( "\\*{1}(?!I)(?!\\*)(?!kern|silbe)(clef[a-zA-Z]+[0-9]|k\\[[a-zA-Z#\\-]*\\]|M\\d{1,}\\/\\d{1,}|[a-gA-G]:|met\\([a-z]\\)|M{2}[0-9]*)?\\s*", token );
 	}
 	
 	
